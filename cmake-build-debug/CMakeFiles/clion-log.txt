@@ -1,0 +1,4 @@
+/snap/clion/189/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/snap/clion/189/bin/ninja/linux/ninja -G Ninja -S /home/araujvin/ITA/2022-1/ces33/minishell -B /home/araujvin/ITA/2022-1/ces33/minishell/cmake-build-debug
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/araujvin/ITA/2022-1/ces33/minishell/cmake-build-debug

@@ -1,0 +1,3 @@
+/home/araujvin/ITA/2022-1/ces33/minishell/cmake-build-debug/CMakeFiles/minishell.dir
+/home/araujvin/ITA/2022-1/ces33/minishell/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/araujvin/ITA/2022-1/ces33/minishell/cmake-build-debug/CMakeFiles/rebuild_cache.dir
