@@ -11,3 +11,165 @@ file(GLOB SOURCES "./*.c")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
 add_executable(minishell main.c)
 target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaa
+URCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaaURCES "./*.c")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
+add_executable(minishell main.c)
+target_link_libraries(minishell readline tinfo)
+aaaaaaaaaaaa
