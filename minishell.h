@@ -23,13 +23,16 @@ typedef struct Command
     struct Command *next;
     int argc;
     char **argv;
+
 } Command;
 
 void parse(Command *c, char * ci);
-int process(Command *c);
-int outCommand(Command *b, Command *c);
-int inCommand(Command *b, Command *c);
-int n_Command(Command *c);
+int execute(Command *c);
+int spawnProcess(int in, int out, Command *c);
+int outCommand(int in, Command *c);
+int inCommand(int out, Command *c);
+int lastCommand(int in, Command *c);
 void freeCommands(Command *c);
 void __debugToken(Command *c);
+
 #endif //MINISHELL_MINISHELL_H

@@ -10,7 +10,9 @@ int main() {
             break;
         }
         parse(command, command_input);
-        process(command);
+        //__debugToken(command);
+        execute(command);
+        freeCommands(command);
     }
     return 0;
 }
