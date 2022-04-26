@@ -9,5 +9,5 @@ include_directories(/usr/lib64/libtinfo)
 file(GLOB SOURCES "./*.c")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lreadline -ltinfo")
-add_executable(minishell main.c)
+add_executable(minishell main.c minishell.h minishell.c)
 target_link_libraries(minishell readline tinfo)
