@@ -63,7 +63,7 @@ int outCommand(int in, Command *b){
         // child
         if (in != STDIN_FILENO)
         {
-            dup2 (in, 0);
+            dup2 (in, STDIN_FILENO);
             close (in);
         }
         close(fout);
@@ -78,8 +78,34 @@ int outCommand(int in, Command *b){
     return 0;
 }
 
-int inCommand(int out, Command*c){
-    printf("entered in command\n");
+int inCommand(int out, Command *b){
+    Command *c = b->next->next;
+    int std_in = dup(STDIN_FILENO);
+    int fin = open(c->argv[0], O_RDONLY);
+    if (fin < 0) {
+        perror("Something wrong with file, ERROR");
+        return -1;
+    }
+    if(dup2(fin, STDIN_FILENO) == -1){
+        perror("ERROR: dup2(2)");
+        return EXIT_FAILURE;
+    }
+    if(fork() == 0){
+        // child
+        if (out != STDOUT_FILENO)
+        {
+            dup2 (out, STDOUT_FILENO);
+            close (out);
+        }
+        close(fin);
+        execve(b->argv[0], b->argv, 0);
+        perror("Execution error");
+        return 0;
+    }
+    // parent
+    dup2(std_in, STDIN_FILENO);
+    close(fin);
+    wait(NULL);
     return 0;
 }
 
@@ -153,10 +179,11 @@ int execute(Command *c){
             }
             curr = curr->next->next;
         } else if(strcmp(curr->next->argv[0], "<") == 0){
-            if (inCommand(fd[1], curr) == -1){
+            int out = curr->next->next->next == NULL? STDOUT_FILENO : fd[1];
+            if (inCommand(out, curr) == -1){
                 return EXIT_FAILURE;
             }
-            curr = curr->next->next;
+            curr = curr->next->next->next == NULL? curr->next->next: curr->next->next->next;
         }
         curr = curr->next;
         close(fd[1]);
