@@ -1,5 +1,0 @@
-main.c
-minishell.c
-minishell.h
-obj.o
-out.txt
