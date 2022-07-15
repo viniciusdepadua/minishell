@@ -3,17 +3,57 @@
 //
 #include "minishell.h"
 
-void parse(Command *c, char * ci){
+pid_t shell_pgid;
+struct termios shell_tmodes;
+int shell_terminal;
+int shell_is_interactive;
+
+void init_shell(){
+    shell_terminal = STDIN_FILENO;
+    shell_is_interactive = isatty (shell_terminal);
+
+    if (shell_is_interactive)
+    {
+        /* Loop until we are in the foreground.  */
+        while (tcgetpgrp (shell_terminal) != (shell_pgid = getpgrp ())){
+            kill (shell_pgid, SIGTTIN);
+        }
+
+        /* Ignore interactive and job-control signals.  */
+        signal (SIGINT, SIG_IGN);
+        signal (SIGQUIT, SIG_IGN);
+        signal (SIGTSTP, SIG_IGN);
+        signal (SIGTTIN, SIG_IGN);
+        signal (SIGTTOU, SIG_IGN);
+        signal (SIGCHLD, SIG_IGN);
+
+        /* Put ourselves in our own process group.  */
+        shell_pgid = getpid ();
+
+        if (setpgid (shell_pgid, shell_pgid) < 0)
+        {
+            perror ("Couldn't put the shell in its own process group");
+            exit (1);
+        }
+        /* Grab control of the terminal.  */
+        tcsetpgrp (shell_terminal, shell_pgid);
+
+        /* Save default terminal attributes for shell.  */
+        tcgetattr (shell_terminal, &shell_tmodes);
+    }
+}
+
+void parse(Process *c, char * ci){
     char *token = strtok(ci, " ");
     int sz = CAP_TOKENS;
     c->argv = (char **) calloc(sz, sizeof(char*));
     int args = 0;
-    Command *itr = c;
+    Process *itr = c;
     while( token != NULL ) {
         // "cmd1" -> pipe -> "cmd2"
         if(strcmp(token, ">") == 0 || strcmp(token, "<") == 0 || strcmp(token, "|") == 0){
             // ->pipe
-            itr->next = (Command*) malloc(sizeof(Command));
+            itr->next = (Process*) malloc(sizeof(Process));
             itr->argc = args;
             args = 0;
 
@@ -23,7 +63,7 @@ void parse(Command *c, char * ci){
             strcpy(itr->argv[args], token);
             itr->argc = 1;
             // -> "cmd2"
-            itr->next = (Command*) calloc(1, sizeof(Command));
+            itr->next = (Process*) calloc(1, sizeof(Process));
             itr = itr->next;
 
             itr->argc = 0;
@@ -47,8 +87,8 @@ void parse(Command *c, char * ci){
     itr->next = NULL;
 }
 
-int outCommand(int in, Command *b){
-    Command *c = b->next->next;
+int outCommand(int in, Process *b){
+    Process *c = b->next->next;
     int std_out = dup(STDOUT_FILENO);
     int fout = open(c->argv[0], O_RDWR | O_CREAT | O_TRUNC, 0644);
     if (fout < 0) {
@@ -78,8 +118,8 @@ int outCommand(int in, Command *b){
     return 0;
 }
 
-int inCommand(int out, Command *b){
-    Command *c = b->next->next;
+int inCommand(int out, Process *b){
+    Process *c = b->next->next;
     int std_in = dup(STDIN_FILENO);
     int fin = open(c->argv[0], O_RDONLY);
     if (fin < 0) {
@@ -109,7 +149,154 @@ int inCommand(int out, Command *b){
     return 0;
 }
 
-int spawnProcess(int in, int out, Command*c){
+
+int mark_process_status (pid_t pid, int status)
+{
+    Job *j;
+    Process *p;
+
+    if (pid > 0)
+    {
+        /* Update the record for the process.  */
+        for (j = first_job; j; j = j->next)
+            for (p = j->first_process; p; p = p->next)
+                if (p->pid == pid){
+                    p->status = status;
+                    if (WIFSTOPPED (status))
+                        p->stopped = 1;
+                    else{
+                        p->completed = 1;
+                        if (WIFSIGNALED (status))
+                            fprintf (stderr, "%d: Terminated by signal %d.\n",
+                                     (int) pid, WTERMSIG (p->status));
+                    }
+                    return 0;
+                }
+        fprintf (stderr, "No child process %d.\n", pid);
+        return -1;
+    }
+
+    else if (pid == 0 || errno == ECHILD)
+        /* No processes ready to report.  */
+        return -1;
+    else {
+        /* Other weird errors.  */
+        perror ("waitpid");
+        return -1;
+    }
+}
+
+
+/* Check for processes that have status information available,
+   without blocking.  */
+
+void update_status (void)
+{
+    int status;
+    pid_t pid;
+
+    do
+        pid = waitpid (WAIT_ANY, &status, WUNTRACED|WNOHANG);
+    while (!mark_process_status (pid, status));
+}
+
+
+/* Check for processes that have status information available,
+   blocking until all processes in the given job have reported.  */
+
+void wait_for_job (Job *j)
+{
+    int status;
+    pid_t pid;
+
+    do
+        pid = waitpid (WAIT_ANY, &status, WUNTRACED);
+    while (!mark_process_status (pid, status)
+           && !job_is_stopped (j)
+           && !job_is_completed (j));
+}
+
+
+/* Format information about job status for the user to look at.  */
+
+void format_job_info (Job *j, const char *status)
+{
+    fprintf (stderr, "%ld (%s): %s\n", (long)j->pgid, status, j->command);
+}
+
+
+/* Notify the user about stopped or terminated jobs.
+   Delete terminated jobs from the active job list.  */
+
+void do_job_notification (void)
+{
+    Job *j, *jlast, *jnext;
+
+    /* Update status information for child processes.  */
+    update_status ();
+
+    jlast = NULL;
+    for (j = first_job; j; j = jnext)
+    {
+        jnext = j->next;
+
+        /* If all processes have completed, tell the user the job has
+           completed and delete it from the list of active jobs.  */
+        if (job_is_completed (j)) {
+            format_job_info (j, "completed");
+            if (jlast)
+                jlast->next = jnext;
+            else
+                first_job = jnext;
+        }
+
+            /* Notify the user about stopped jobs,
+               marking them so that we won’t do this more than once.  */
+        else if (job_is_stopped (j) && !j->notified) {
+            format_job_info (j, "stopped");
+            j->notified = 1;
+            jlast = j;
+        }
+
+            /* Don’t say anything about jobs that are still running.  */
+        else
+            jlast = j;
+    }
+}
+
+
+void put_job_in_foreground (Job *j, int cont){
+    /* Put the job into the foreground.  */
+    tcsetpgrp (shell_terminal, j->pgid);
+
+
+    /* Send the job a continue signal, if necessary.  */
+    if (cont){
+        tcsetattr (shell_terminal, TCSADRAIN, &j->tmodes);
+        if (kill (- j->pgid, SIGCONT) < 0)
+            perror ("kill (SIGCONT)");
+    }
+
+
+    /* Wait for it to report.  */
+    wait_for_job (j);
+
+    /* Put the shell back in the foreground.  */
+    tcsetpgrp (shell_terminal, shell_pgid);
+
+    /* Restore the shell’s terminal modes.  */
+    tcgetattr (shell_terminal, &j->tmodes);
+    tcsetattr (shell_terminal, TCSADRAIN, &shell_tmodes);
+}
+
+void put_job_in_background (Job *j, int cont){
+    /* Send the job a continue signal, if necessary.  */
+    if (cont)
+        if (kill (-j->pgid, SIGCONT) < 0)
+            perror ("kill (SIGCONT)");
+}
+
+int spawnProcess(int in, int out, Process*c){
     pid_t pid;
     pid = fork();
     if(pid == -1){
@@ -136,7 +323,7 @@ int spawnProcess(int in, int out, Command*c){
     return pid;
 }
 
-int lastCommand(int in, Command* c){
+int lastCommand(int in, Process* c){
     pid_t status_pid;
     int pid = fork();
     if(pid < 0){
@@ -156,12 +343,12 @@ int lastCommand(int in, Command* c){
     return 0;
 }
 
-int execute(Command *c){
+int execute(Process *c){
     int in = STDIN_FILENO;
     int fd[2];
 
-    Command * curr = c;
-    Command * bef = NULL;
+    Process * curr = c;
+    Process * bef = NULL;
 
     while(curr != NULL && curr ->next != NULL) {
         if (pipe(fd) == -1){
@@ -200,9 +387,9 @@ int execute(Command *c){
 
 }
 
-void freeCommands(Command *c){
+void freeCommands(Process *c){
     while (c != NULL){
-        Command *temp = c;
+        Process *temp = c;
         c = c -> next;
         for(int i = 0 ; i < temp->argc; i ++){
             free(temp->argv[i]);
@@ -212,8 +399,8 @@ void freeCommands(Command *c){
     }
 }
 
-void __debugToken(Command *c){
-    Command *itr = c;
+void __debugToken(Process *c){
+    Process *itr = c;
     int j = 0;
     while(itr != NULL){
         for(int i = 0; i < itr->argc; i++){

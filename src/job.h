@@ -24,6 +24,7 @@ typedef struct Job
     int stdin, stdout, stderr;  /* standard i/o channels */
 } Job;
 
+Job* first_job;
 Job * find_job(pid_t pgid);
 int job_is_stopped(Job* j);
 int job_is_completed(Job* j);

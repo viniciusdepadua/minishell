@@ -1,10 +1,12 @@
 #include "minishell.h"
 
 int main() {
+    init_shell();
     printf("Welcome to the miniature-shell.\n");
     while(true){
-        Command *command;
-        command = (Command*) malloc(sizeof(Command));
+        //init_shell();
+        Process *command;
+        command = (Process*) malloc(sizeof(Process));
 
         char *command_input = readline("cmd> ");
         if(strcmp(command_input, "exit") == 0 || strcmp(command_input, "quit") == 0){
