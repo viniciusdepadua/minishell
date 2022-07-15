@@ -4,7 +4,6 @@ int main() {
     init_shell();
     printf("Welcome to the miniature-shell.\n");
     while(true){
-        //init_shell();
         Process *command;
         command = (Process*) malloc(sizeof(Process));
 

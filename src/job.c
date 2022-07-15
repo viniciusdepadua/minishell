@@ -3,8 +3,7 @@
 //
 
 #include "job.h"
-
-Job *first_job = NULL;
+Job* first_job = NULL;
 
 Job* find_job(pid_t pgid){
     Job* j;
