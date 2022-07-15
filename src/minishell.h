@@ -15,24 +15,26 @@
 #include <readline/history.h>
 #include <string.h>
 #include <unistd.h>
-
+#include "process.h"
+#include "job.h"
+#include <sys/types.h>
+#include <termios.h>
+#include <unistd.h>
 #define CAP_TOKENS 10
 
-typedef struct Command
-{
-    struct Command *next;
-    int argc;
-    char **argv;
+pid_t shell_pgid;
+struct termios shell_tmodes;
+int shell_terminal;
+int shell_is_interactive;
 
-} Command;
-
-void parse(Command *c, char * ci);
-int execute(Command *c);
-int spawnProcess(int in, int out, Command *c);
-int outCommand(int in, Command *c);
-int inCommand(int out, Command *c);
-int lastCommand(int in, Command *c);
-void freeCommands(Command *c);
-void __debugToken(Command *c);
+void init_shell();
+void parse(Process *c, char * ci);
+int execute(Process *c);
+int spawnProcess(int in, int out, Process *c);
+int outCommand(int in, Process *c);
+int inCommand(int out, Process *c);
+int lastCommand(int in, Process *c);
+void freeCommands(Process *c);
+void __debugToken(Process *c);
 
 #endif //MINISHELL_MINISHELL_H
